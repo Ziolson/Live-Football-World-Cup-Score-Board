@@ -13,14 +13,16 @@ public class ScoreBoard {
     }
 
     public void startMatch(String homeTeam, String awayTeam) {
-        if (homeTeam == null || awayTeam == null) {
-            return;
-        }
-
         Match match = new Match(homeTeam, awayTeam);
-        if (!matches.contains(match)) {
-            matches.add(match);
+        if (matches.contains(match)) {
+            throw new IllegalArgumentException("Match already exists");
         }
+        matches.stream().filter(m -> m.getHomeTeam().equals(homeTeam) || m.getAwayTeam().equals(homeTeam))
+                .findAny()
+                .ifPresent(m -> {
+                    throw new IllegalArgumentException("Team already plays different match");
+                });
+        matches.add(match);
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {

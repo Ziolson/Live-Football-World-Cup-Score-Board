@@ -9,8 +9,11 @@ public class Match {
     private int awayScore;
 
     public Match(String homeTeam, String awayTeam) {
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
+        this.homeTeam = Objects.requireNonNull(homeTeam, "Home team must not be null");
+        this.awayTeam = Objects.requireNonNull(awayTeam, "Away team must not be null");
+        if (homeTeam.equals(awayTeam)) {
+            throw new IllegalArgumentException("Teams must be different");
+        }
         this.homeScore = 0;
         this.awayScore = 0;
     }

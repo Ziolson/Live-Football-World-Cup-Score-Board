@@ -19,18 +19,20 @@ class ScoreBoardTest {
     void startMatch_duplicateMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.startMatch("Mexico", "Canada");
         });
+        assertEquals("Match already exists", exception.getMessage());
         assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
     void startMatch_teamNamesAreTheSame() {
         ScoreBoard scoreBoard = new ScoreBoard();
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.startMatch("Mexico", "Mexico");
         });
+        assertEquals("Teams must be different", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
@@ -38,27 +40,30 @@ class ScoreBoardTest {
     void startMatch_teamAlreadyPlayDifferentMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.startMatch("Mexico", "Brazil");
         });
+        assertEquals("Team already plays different match", exception.getMessage());
         assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
     void startMatch_nullHomeTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(NullPointerException.class, () -> {
             scoreBoard.startMatch(null, "Canada");
         });
+        assertEquals("Home team must not be null", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
     @Test
     void startMatch_nullAwayTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(NullPointerException.class, () -> {
             scoreBoard.startMatch("Mexico", null);
         });
+        assertEquals("Away team must not be null", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
@@ -76,7 +81,7 @@ class ScoreBoardTest {
     void updateScore_nullHomeTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.updateScore(null, "Canada", 1, 0);
         });
     }
@@ -85,7 +90,7 @@ class ScoreBoardTest {
     void updateScore_nullAwayTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.updateScore("Mexico", null, 1, 0);
         });
     }
@@ -93,7 +98,7 @@ class ScoreBoardTest {
     @Test
     void updateScore_matchNotStarted() {
         ScoreBoard scoreBoard = new ScoreBoard();
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.updateScore("Mexico", "Canada", 1, 0);
         });
     }
@@ -110,7 +115,7 @@ class ScoreBoardTest {
     @Test
     void finishMatch_matchNotStarted() {
         ScoreBoard scoreBoard = new ScoreBoard();
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.finishMatch("Mexico", "Canada");
         });
     }
@@ -119,7 +124,7 @@ class ScoreBoardTest {
     void finishMatch_nullHomeTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.finishMatch(null, "Canada");
         });
     }
@@ -129,7 +134,7 @@ class ScoreBoardTest {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
         assertEquals(1, scoreBoard.getSummary().size());
-        Exception exception = assertThrows(Exception.class, () -> {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.finishMatch("Mexico", null);
         });
     }
