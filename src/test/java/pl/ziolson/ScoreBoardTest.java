@@ -19,21 +19,46 @@ class ScoreBoardTest {
     void startMatch_duplicateMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+        Exception exception = assertThrows(Exception.class, () -> {
+            scoreBoard.startMatch("Mexico", "Canada");
+        });
+        assertEquals(1, scoreBoard.getSummary().size());
+    }
+
+    @Test
+    void startMatch_teamNamesAreTheSame() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+        Exception exception = assertThrows(Exception.class, () -> {
+            scoreBoard.startMatch("Mexico", "Mexico");
+        });
+        assertEquals(0, scoreBoard.getSummary().size());
+    }
+
+    @Test
+    void startMatch_teamAlreadyPlayDifferentMatch() {
+        ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+        Exception exception = assertThrows(Exception.class, () -> {
+            scoreBoard.startMatch("Mexico", "Brazil");
+        });
         assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
     void startMatch_nullHomeTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
-        scoreBoard.startMatch(null, "Canada");
+        Exception exception = assertThrows(Exception.class, () -> {
+            scoreBoard.startMatch(null, "Canada");
+        });
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
     @Test
     void startMatch_nullAwayTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
-        scoreBoard.startMatch("Mexico", null);
+        Exception exception = assertThrows(Exception.class, () -> {
+            scoreBoard.startMatch("Mexico", null);
+        });
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
@@ -137,5 +162,36 @@ class ScoreBoardTest {
         assertEquals(2, summary.size());
         assertEquals("Argentina", summary.get(0).getHomeTeam());
         assertEquals("Germany", summary.get(1).getHomeTeam());
+    }
+
+    @Test
+    void getSummary_noMatches() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+        List<Match> summary = scoreBoard.getSummary();
+        assertEquals(0, summary.size());
+    }
+
+    @Test
+    void getSummary_shouldSortByTotalScoreAndMostRecentlyForSameScores() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+        scoreBoard.startMatch("Mexico", "Canada");
+        scoreBoard.updateScore("Mexico", "Canada", 0, 5);
+        scoreBoard.startMatch("Spain", "Brazil");
+        scoreBoard.updateScore("Spain", "Brazil", 10, 2);
+        scoreBoard.startMatch("Germany", "France");
+        scoreBoard.updateScore("Germany", "France", 2, 2);
+        scoreBoard.startMatch("Uruguay", "Italy");
+        scoreBoard.updateScore("Uruguay", "Italy", 6, 6);
+        scoreBoard.startMatch("Argentina", "Australia");
+        scoreBoard.updateScore("Argentina", "Australia", 3, 1);
+
+        List<Match> summary = scoreBoard.getSummary();
+
+        assertEquals(5, summary.size());
+        assertEquals("Uruguay", summary.get(0).getHomeTeam());
+        assertEquals("Spain", summary.get(1).getHomeTeam());
+        assertEquals("Mexico", summary.get(2).getHomeTeam());
+        assertEquals("Argentina", summary.get(3).getHomeTeam());
+        assertEquals("Germany", summary.get(4).getHomeTeam());
     }
 }
