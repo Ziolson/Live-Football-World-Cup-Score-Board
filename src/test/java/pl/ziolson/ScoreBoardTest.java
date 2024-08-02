@@ -84,7 +84,7 @@ class ScoreBoardTest {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
 
-        scoreBoard.updateScore("Mexico", "Canada", 1, 0);
+        scoreBoard.updateScore("Mexico", "Canada", (byte) 1, (byte) 0);
 
         assertEquals(1, scoreBoard.getSummary().size());
         assertEquals(1, scoreBoard.getSummary().getFirst().getHomeScore());
@@ -97,7 +97,7 @@ class ScoreBoardTest {
         scoreBoard.startMatch("Mexico", "Canada");
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            scoreBoard.updateScore("Mexico", "Canada", -1, -2);
+            scoreBoard.updateScore("Mexico", "Canada", (byte) -1, (byte) -2);
         });
 
         assertEquals("Score must be greater or equal to 0", exception.getMessage());
@@ -111,7 +111,7 @@ class ScoreBoardTest {
         scoreBoard.startMatch("Mexico", "Canada");
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            scoreBoard.updateScore(null, "Canada", 1, 0);
+            scoreBoard.updateScore(null, "Canada", (byte) 1, (byte) 0);
         });
 
         assertEquals(0, scoreBoard.getSummary().getFirst().getHomeScore());
@@ -124,7 +124,7 @@ class ScoreBoardTest {
         scoreBoard.startMatch("Mexico", "Canada");
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            scoreBoard.updateScore("Mexico", null, 1, 0);
+            scoreBoard.updateScore("Mexico", null, (byte) 1, (byte) 0);
         });
 
         assertEquals(0, scoreBoard.getSummary().getFirst().getHomeScore());
@@ -136,7 +136,7 @@ class ScoreBoardTest {
         ScoreBoard scoreBoard = new ScoreBoard();
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            scoreBoard.updateScore("Mexico", "Canada", 1, 0);
+            scoreBoard.updateScore("Mexico", "Canada", (byte) 1, (byte) 0);
         });
 
         assertEquals("Match not found", exception.getMessage());
@@ -192,9 +192,9 @@ class ScoreBoardTest {
     void getSummaryShouldSortByTotalScoresDescending() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        scoreBoard.updateScore("Mexico", "Canada", 0, 5);
+        scoreBoard.updateScore("Mexico", "Canada", (byte) 0, (byte) 5);
         scoreBoard.startMatch("Spain", "Brazil");
-        scoreBoard.updateScore("Spain", "Brazil", 10, 2);
+        scoreBoard.updateScore("Spain", "Brazil", (byte) 10, (byte) 2);
 
         List<Match> summary = scoreBoard.getSummary();
 
@@ -207,9 +207,9 @@ class ScoreBoardTest {
     void getSummaryShouldShouldSortByMostRecentWhenSameScore() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Germany", "France");
-        scoreBoard.updateScore("Germany", "France", 2, 2);
+        scoreBoard.updateScore("Germany", "France", (byte) 2, (byte) 2);
         scoreBoard.startMatch("Argentina", "Australia");
-        scoreBoard.updateScore("Argentina", "Australia", 3, 1);
+        scoreBoard.updateScore("Argentina", "Australia", (byte) 3, (byte) 1);
 
         List<Match> summary = scoreBoard.getSummary();
 
@@ -231,15 +231,15 @@ class ScoreBoardTest {
     void getSummaryShouldSortByTotalScoreDescendingAndMostRecentlyForSameScores() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        scoreBoard.updateScore("Mexico", "Canada", 0, 5);
+        scoreBoard.updateScore("Mexico", "Canada", (byte) 0, (byte) 5);
         scoreBoard.startMatch("Spain", "Brazil");
-        scoreBoard.updateScore("Spain", "Brazil", 10, 2);
+        scoreBoard.updateScore("Spain", "Brazil", (byte) 10, (byte) 2);
         scoreBoard.startMatch("Germany", "France");
-        scoreBoard.updateScore("Germany", "France", 2, 2);
+        scoreBoard.updateScore("Germany", "France", (byte) 2, (byte) 2);
         scoreBoard.startMatch("Uruguay", "Italy");
-        scoreBoard.updateScore("Uruguay", "Italy", 6, 6);
+        scoreBoard.updateScore("Uruguay", "Italy", (byte) 6, (byte) 6);
         scoreBoard.startMatch("Argentina", "Australia");
-        scoreBoard.updateScore("Argentina", "Australia", 3, 1);
+        scoreBoard.updateScore("Argentina", "Australia", (byte) 3, (byte) 1);
 
         List<Match> summary = scoreBoard.getSummary();
 

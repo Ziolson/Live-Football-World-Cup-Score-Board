@@ -5,8 +5,8 @@ import java.util.Objects;
 public class Match {
     private final String homeTeam;
     private final String awayTeam;
-    private int homeScore;
-    private int awayScore;
+    private byte homeScore;
+    private byte awayScore;
 
     public Match(String homeTeam, String awayTeam) {
         this.homeTeam = Objects.requireNonNull(homeTeam, "Home team must not be null");
@@ -30,7 +30,7 @@ public class Match {
         return homeScore;
     }
 
-    public void setHomeScore(int homeScore) {
+    public void setHomeScore(byte homeScore) {
         if (homeScore < 0) {
             throw new IllegalArgumentException("Score must be greater or equal to 0");
         }
@@ -41,7 +41,7 @@ public class Match {
         return awayScore;
     }
 
-    public void setAwayScore(int awayScore) {
+    public void setAwayScore(byte awayScore) {
         if (awayScore < 0) {
             throw new IllegalArgumentException("Score must be greater or equal to 0");
         }
@@ -60,5 +60,10 @@ public class Match {
     @Override
     public int hashCode() {
         return Objects.hash(homeTeam, awayTeam);
+    }
+
+    @Override
+    public String toString() {
+        return homeTeam + " " + homeScore + " - " + awayTeam + " " + awayScore;
     }
 }

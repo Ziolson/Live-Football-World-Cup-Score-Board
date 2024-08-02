@@ -1,7 +1,7 @@
 package pl.ziolson;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ScoreBoard {
@@ -9,7 +9,7 @@ public class ScoreBoard {
     private final List<Match> matches;
 
     public ScoreBoard() {
-        this.matches = new ArrayList<>();
+        this.matches = new LinkedList<>();
     }
 
     public void startMatch(String homeTeam, String awayTeam) {
@@ -25,7 +25,7 @@ public class ScoreBoard {
         matches.add(match);
     }
 
-    public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
+    public void updateScore(String homeTeam, String awayTeam, byte homeScore, byte awayScore) {
         Match match = findMatch(homeTeam, awayTeam);
         match.setHomeScore(homeScore);
         match.setAwayScore(awayScore);
@@ -37,7 +37,7 @@ public class ScoreBoard {
     }
 
     public List<Match> getSummary() {
-        List<Match> sortedMatches = new ArrayList<>(matches);
+        List<Match> sortedMatches = new LinkedList<>(matches);
         sortedMatches.sort(Comparator.comparingInt(m -> (m.getHomeScore() + m.getAwayScore())));
         return sortedMatches.reversed();
     }
