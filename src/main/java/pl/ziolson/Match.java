@@ -31,6 +31,9 @@ public class Match {
     }
 
     public void setHomeScore(int homeScore) {
+        if (homeScore < 0) {
+            throw new IllegalArgumentException("Score must be greater or equal to 0");
+        }
         this.homeScore = homeScore;
     }
 
@@ -39,6 +42,9 @@ public class Match {
     }
 
     public void setAwayScore(int awayScore) {
+        if (awayScore < 0) {
+            throw new IllegalArgumentException("Score must be greater or equal to 0");
+        }
         this.awayScore = awayScore;
     }
 

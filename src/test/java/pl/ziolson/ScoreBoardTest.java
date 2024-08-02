@@ -100,6 +100,7 @@ class ScoreBoardTest {
             scoreBoard.updateScore("Mexico", "Canada", -1, -2);
         });
 
+        assertEquals("Score must be greater or equal to 0", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().getFirst().getHomeScore());
         assertEquals(0, scoreBoard.getSummary().getFirst().getAwayScore());
     }
