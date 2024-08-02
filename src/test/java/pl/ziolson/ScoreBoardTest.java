@@ -80,6 +80,30 @@ class ScoreBoardTest {
     }
 
     @Test
+    void startMatchShouldThrowExceptionWhenHomeTeamIsEmpty() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            scoreBoard.startMatch("", "Canada");
+        });
+
+        assertEquals("Home team must not be empty", exception.getMessage());
+        assertEquals(0, scoreBoard.getSummary().size());
+    }
+
+    @Test
+    void startMatchShouldThrowExceptionWhenAwayTeamIsEmpty() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            scoreBoard.startMatch("Mexico", "");
+        });
+
+        assertEquals("Away team must not be empty", exception.getMessage());
+        assertEquals(0, scoreBoard.getSummary().size());
+    }
+
+    @Test
     void updateScoreShouldUpdateMatchScore() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
