@@ -9,138 +9,173 @@ import static org.junit.jupiter.api.Assertions.*;
 class ScoreBoardTest {
 
     @Test
-    void startMatch_happyPath() {
+    void startMatchShouldStartNewMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
+
         scoreBoard.startMatch("Mexico", "Canada");
+
         assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
-    void startMatch_duplicateMatch() {
+    void startMatchShouldThrowExceptionWhenDuplicatedMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.startMatch("Mexico", "Canada");
         });
+
         assertEquals("Match already exists", exception.getMessage());
         assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
-    void startMatch_teamNamesAreTheSame() {
+    void startMatchShouldThrowExceptionWhenTeamNamesAreTheSame() {
         ScoreBoard scoreBoard = new ScoreBoard();
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.startMatch("Mexico", "Mexico");
         });
+
         assertEquals("Teams must be different", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
     @Test
-    void startMatch_teamAlreadyPlayDifferentMatch() {
+    void startMatchShouldThrowExceptionWhenTeamAlreadyPlayDifferentMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.startMatch("Mexico", "Brazil");
         });
+
         assertEquals("Team already plays different match", exception.getMessage());
         assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
-    void startMatch_nullHomeTeam() {
+    void startMatchShouldThrowExceptionWhenHomeTeamIsNull() {
         ScoreBoard scoreBoard = new ScoreBoard();
+
         Exception exception = assertThrows(NullPointerException.class, () -> {
             scoreBoard.startMatch(null, "Canada");
         });
+
         assertEquals("Home team must not be null", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
     @Test
-    void startMatch_nullAwayTeam() {
+    void startMatchShouldThrowExceptionWhenAwayTeamIsNull() {
         ScoreBoard scoreBoard = new ScoreBoard();
+
         Exception exception = assertThrows(NullPointerException.class, () -> {
             scoreBoard.startMatch("Mexico", null);
         });
+
         assertEquals("Away team must not be null", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
     @Test
-    void updateScore_happyPath() {
+    void updateScoreShouldUpdateMatchScore() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+
         scoreBoard.updateScore("Mexico", "Canada", 1, 0);
+
         assertEquals(1, scoreBoard.getSummary().size());
         assertEquals(1, scoreBoard.getSummary().getFirst().getHomeScore());
         assertEquals(0, scoreBoard.getSummary().getFirst().getAwayScore());
     }
 
     @Test
-    void updateScore_nullHomeTeam() {
+    void updateScoreShouldThrowExceptionWhenHomeTeamIsNull() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.updateScore(null, "Canada", 1, 0);
         });
+
+        assertEquals(0, scoreBoard.getSummary().getFirst().getHomeScore());
+        assertEquals(0, scoreBoard.getSummary().getFirst().getAwayScore());
     }
 
     @Test
-    void updateScore_nullAwayTeam() {
+    void updateScoreShouldThrowExceptionWhenAwayTeamIsNull() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.updateScore("Mexico", null, 1, 0);
         });
+
+        assertEquals(0, scoreBoard.getSummary().getFirst().getHomeScore());
+        assertEquals(0, scoreBoard.getSummary().getFirst().getAwayScore());
     }
 
     @Test
-    void updateScore_matchNotStarted() {
+    void updateScoreShouldThrowExceptionWhenMatchNotStarted() {
         ScoreBoard scoreBoard = new ScoreBoard();
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.updateScore("Mexico", "Canada", 1, 0);
         });
+
+        assertEquals("Match not found", exception.getMessage());
     }
 
     @Test
-    void finishMatch() {
+    void finishMatchShouldRemoveMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
         assertEquals(1, scoreBoard.getSummary().size());
+
         scoreBoard.finishMatch("Mexico", "Canada");
+
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
     @Test
-    void finishMatch_matchNotStarted() {
+    void finishMatchShouldThrowExceptionWhenMatchNotStarted() {
         ScoreBoard scoreBoard = new ScoreBoard();
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.finishMatch("Mexico", "Canada");
         });
+
+        assertEquals("Match not found", exception.getMessage());
     }
 
     @Test
-    void finishMatch_nullHomeTeam() {
+    void finishMatchShouldThrowExceptionWhenHomeTeamIsNull() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.finishMatch(null, "Canada");
         });
+
+        assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
-    void finishMatch_nullAwayTeam() {
+    void finishMatchShouldThrowExceptionWhenAwayTeamIsNull() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
-        assertEquals(1, scoreBoard.getSummary().size());
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.finishMatch("Mexico", null);
         });
+
+        assertEquals(1, scoreBoard.getSummary().size());
     }
 
     @Test
-    void getSummary_happyPath() {
+    void getSummaryShouldSortByTotalScoresDescending() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
         scoreBoard.updateScore("Mexico", "Canada", 0, 5);
@@ -155,7 +190,7 @@ class ScoreBoardTest {
     }
 
     @Test
-    void getSummary_sameScore() {
+    void getSummaryShouldShouldSortByMostRecentWhenSameScore() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Germany", "France");
         scoreBoard.updateScore("Germany", "France", 2, 2);
@@ -170,14 +205,16 @@ class ScoreBoardTest {
     }
 
     @Test
-    void getSummary_noMatches() {
+    void getSummaryShouldReturnEmptyListWhenNoMatchesStarted() {
         ScoreBoard scoreBoard = new ScoreBoard();
+
         List<Match> summary = scoreBoard.getSummary();
+
         assertEquals(0, summary.size());
     }
 
     @Test
-    void getSummary_shouldSortByTotalScoreAndMostRecentlyForSameScores() {
+    void getSummaryShouldSortByTotalScoreDescendingAndMostRecentlyForSameScores() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
         scoreBoard.updateScore("Mexico", "Canada", 0, 5);
