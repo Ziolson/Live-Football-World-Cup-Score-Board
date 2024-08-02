@@ -92,6 +92,19 @@ class ScoreBoardTest {
     }
 
     @Test
+    void updateScoreShouldAcceptOnlyPositiveNumbers() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+        scoreBoard.startMatch("Mexico", "Canada");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            scoreBoard.updateScore("Mexico", "Canada", -1, -2);
+        });
+
+        assertEquals(0, scoreBoard.getSummary().getFirst().getHomeScore());
+        assertEquals(0, scoreBoard.getSummary().getFirst().getAwayScore());
+    }
+
+    @Test
     void updateScoreShouldThrowExceptionWhenHomeTeamIsNull() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
