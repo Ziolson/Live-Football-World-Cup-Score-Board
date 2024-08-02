@@ -11,6 +11,9 @@ public class Match {
     public Match(String homeTeam, String awayTeam) {
         this.homeTeam = Objects.requireNonNull(homeTeam, "Home team must not be null");
         this.awayTeam = Objects.requireNonNull(awayTeam, "Away team must not be null");
+        if (homeTeam.isEmpty() || awayTeam.isEmpty()) {
+            throw new IllegalArgumentException("Team name must not be empty");
+        }
         if (homeTeam.equals(awayTeam)) {
             throw new IllegalArgumentException("Teams must be different");
         }

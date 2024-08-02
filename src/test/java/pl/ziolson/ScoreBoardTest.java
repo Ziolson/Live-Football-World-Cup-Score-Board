@@ -87,7 +87,7 @@ class ScoreBoardTest {
             scoreBoard.startMatch("", "Canada");
         });
 
-        assertEquals("Home team must not be empty", exception.getMessage());
+        assertEquals("Team name must not be empty", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
@@ -99,7 +99,7 @@ class ScoreBoardTest {
             scoreBoard.startMatch("Mexico", "");
         });
 
-        assertEquals("Away team must not be empty", exception.getMessage());
+        assertEquals("Team name must not be empty", exception.getMessage());
         assertEquals(0, scoreBoard.getSummary().size());
     }
 
