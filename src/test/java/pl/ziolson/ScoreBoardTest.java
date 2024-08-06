@@ -43,12 +43,25 @@ class ScoreBoardTest {
     }
 
     @Test
-    void startMatchShouldThrowExceptionWhenTeamAlreadyPlayDifferentMatch() {
+    void startMatchShouldThrowExceptionWhenHomeTeamAlreadyPlayDifferentMatch() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreBoard.startMatch("Mexico", "Brazil");
+        });
+
+        assertEquals("Team already plays different match", exception.getMessage());
+        assertEquals(1, scoreBoard.getSummary().size());
+    }
+
+    @Test
+    void startMatchShouldThrowExceptionWhenAwayTeamAlreadyPlayDifferentMatch() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+        scoreBoard.startMatch("Mexico", "Canada");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            scoreBoard.startMatch("Brazil", "Canada");
         });
 
         assertEquals("Team already plays different match", exception.getMessage());
@@ -116,12 +129,26 @@ class ScoreBoardTest {
     }
 
     @Test
-    void updateScoreShouldAcceptOnlyPositiveNumbers() {
+    void updateScoreShouldAcceptOnlyPositiveNumbersForHomeTeam() {
         ScoreBoard scoreBoard = new ScoreBoard();
         scoreBoard.startMatch("Mexico", "Canada");
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            scoreBoard.updateScore("Mexico", "Canada", (byte) -1, (byte) -2);
+            scoreBoard.updateScore("Mexico", "Canada", (byte) -1, (byte) 2);
+        });
+
+        assertEquals("Score must be greater or equal to 0", exception.getMessage());
+        assertEquals(0, scoreBoard.getSummary().getFirst().getHomeScore());
+        assertEquals(0, scoreBoard.getSummary().getFirst().getAwayScore());
+    }
+
+    @Test
+    void updateScoreShouldAcceptOnlyPositiveNumbersForAwayTeam() {
+        ScoreBoard scoreBoard = new ScoreBoard();
+        scoreBoard.startMatch("Mexico", "Canada");
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            scoreBoard.updateScore("Mexico", "Canada", (byte) 1, (byte) -2);
         });
 
         assertEquals("Score must be greater or equal to 0", exception.getMessage());
